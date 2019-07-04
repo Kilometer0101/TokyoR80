@@ -1,5 +1,5 @@
 ---
-title: "memo: TokyoR80"
+title: "memo"
 author: "km"
 date: "2019/7/4"
 output: html_document
