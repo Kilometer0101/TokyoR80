@@ -31,21 +31,22 @@ use_condaenv("r-reticulate")
 np <- import("numpy")
 pd <- import("pandas")
 
-
+set.seed(71)
 N <- 15
 data.frame(x = 1:N,
-           y = rnorm(N)) %>% 
+           y = rnorm(N),
+           z = sample(letters[1:3], N, replace = TRUE)) %>% 
   write.csv("data/sample1.csv", row.names = F)
 
 source_python("python/sample.py")
 
-# pd <- import("pandas")
 
 path <- "data/sample1.csv" 
 
 path %>% 
-  pd_read_csv() %>% 
-  pd_head()
+  pd_load_csv() -> a
 
 
-a
+pd <- import("pandas")
+
+pd$read_csv(path)
