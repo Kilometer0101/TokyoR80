@@ -7,13 +7,15 @@ use_python(python = "/usr/local/bin/python3",
 
 Sys.which(names = "python")
 
-
 py_config()
 
 conda_list()
 
 conda_create("r-reticulate")
 
+# R reboot: command + shift + 0
+
+conda_list()
 
 use_python(python = "/Users/km/anaconda/envs/r-reticulate/bin/python3",
            required = TRUE)
@@ -46,7 +48,11 @@ path <- "data/sample1.csv"
 path %>% 
   pd_load_csv() -> a
 
+os <- import("os")
+
+os$listdir(".")
 
 pd <- import("pandas")
 
 pd$read_csv(path)
+

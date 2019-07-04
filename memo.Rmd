@@ -1,0 +1,21 @@
+---
+title: "memo: TokyoR80"
+author: "km"
+date: "2019/7/4"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## references
+
+・[reticulate official](https://rstudio.github.io/reticulate/index.html)
+
+・[Rおじさん、Pythonistaになる](https://uribo.hatenablog.com/entry/2017/07/16/100253)
+
+・[macOS+RStudioで呼び出すPythonのバージョンを指定する](https://qiita.com/1sh1da/items/aba7193baf9694ec4908) 
+
+・[condaとpip：混ぜるな危険](http://onoz000.hatenablog.com/entry/2018/02/11/142347)
+
