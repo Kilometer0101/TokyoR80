@@ -9,11 +9,20 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Python環境構築
+
+・システムにプリインストールされているPythonと分けてインストールする事\
+・サンドボックス化[^1]された複数の環境を持てる様にする事
+
+[^1]: 外界と隔離されていて、その中でもしヤバいことが起きても、他には影響が出ない様になっている環境
+
 ## references
 
 ・[reticulate official](https://rstudio.github.io/reticulate/index.html)
 
 ・[Rおじさん、Pythonistaになる](https://uribo.hatenablog.com/entry/2017/07/16/100253)
+
+・[macOSにPython環境を構築する（pyenv＋Anaconda）](https://qiita.com/tanuk1647/items/3cf2f4a348220d90c612)
 
 ・[macOS+RStudioで呼び出すPythonのバージョンを指定する](https://qiita.com/1sh1da/items/aba7193baf9694ec4908) 
 
