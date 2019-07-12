@@ -2,14 +2,38 @@ library(tidyverse)
 library(reticulate)
 
 
-use_python(python = "/usr/local/bin/python3",
+pyenv <- "/Users/km/python/test2/.venv/bin/python3.7"
+
+use_python(python = pyenv, required = TRUE)
+
+use_python(python = ".venv/bin/python3.7",
            required = TRUE)
+
 
 Sys.which(names = "python")
 
 py_config()
 
+
+# create a new environment 
+virtualenv_create("r-reticulate")
+
+
+use_virtualenv("r-reticulate")
+
+
+py_config()
+
+
+
+virtualenv_create("r-reticulate")
+
+virtualenv_list()
+
+
+
 conda_list()
+
 
 conda_create("r-reticulate")
 
@@ -31,6 +55,7 @@ conda_install("r-reticulate", "numpy")
 
 use_condaenv("r-reticulate")
 np <- import("numpy")
+
 pd <- import("pandas")
 
 set.seed(71)
@@ -50,7 +75,6 @@ path %>%
 
 os <- import("os")
 
-os$listdir(".")
 
 pd <- import("pandas")
 
