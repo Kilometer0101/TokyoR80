@@ -1,10 +1,14 @@
 import pandas as pd
-import pandas as np
-import cv2
 
 def pd_load_csv(path):
   df = pd.read_csv(path)
   return df
   
-def pd_head(df):
+def pd_head3(df):
   return df.head(3)
+
+def pd_head(df, n = 3):
+  return df.head(n)
+  
+
+  

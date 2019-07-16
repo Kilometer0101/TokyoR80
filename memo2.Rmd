@@ -1,0 +1,263 @@
+---
+title: "初めてのreticulate"
+author: "km"
+date: "2019/7/16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(reticulate)
+
+```
+
+## 要件
+
+**reticulate**パッケージを使ってR上でPythonを使う。
+
+## Python側の準備
+
+[環境構築](memo.html)を参照。
+
+`Pipenv`で作った仮想環境が入ったフォルダに移動し、インタープリタのpathを確認。
+
+```{bash, eval = F}
+cd <hoge>/project   # 移動
+pipenv shell        # 環境に入る
+pipenv --venv       # pathを確認
+```
+
+Macでは`<hoe>/project/.venv`となる。\
+
+インタープリタのアドレスは`<hoe>/project/.venv/bin/python`となる。
+
+仮想環境中にインストールされているパッケージを確認。
+
+```{bash, eval =F}
+pipenv run pip freeze
+```
+
+ここに**numpyがある**ことが必須。
+
+ない場合は、インストールしておく。
+
+```{bash, eval = F}
+pipenv install numpy
+```
+
+
+## R側の準備
+
+```{r, eval = F}
+install.packages("tidyverse")   # 初心者は黙って入れよう
+install.packages("reticulate")  # R上でPythonを呼び出すインターフェース
+
+library(tidyverse)
+library(reticulate)
+```
+
+## reticulateことはじめ
+
+#### pathを通して仮想環境を呼び出す。
+
+Pythonインタープリタのpathを変数に取っておいて呼び出す。
+
+```{r, include=F}
+python_env <- "/Users/km/python/test/.venv/bin/python"
+
+use_python(python = python_env, required = TRUE)
+```
+
+```{r, eval=F}
+python_env <- "<hoge>/project/.venv/bin/python"
+
+use_python(python = python_env, required = TRUE)
+```
+
+
+確認。
+
+
+```{r, eval = F}
+py_config()
+```
+
+こんな感じの出力になる(はず)。
+
+```{eval = F}
+## python:         <hoge>/project/.venv/bin/python
+## libpython:      /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/config-3.7...
+## pythonhome:     /Library/Frameworks/Python.framework/Versions/3.7:/Library/...
+## virtualenv:     <hoge>/project/.venv/bin/activate_this.py
+## version:        3.7.4 (v3.7.4:e09359112e, Jul  8 2019, 14:36:03) ...
+## numpy:         <hoge>/project/.venv/lib/python3.7/site-packages/numpy
+## numpy_version:  1.16.4
+## 
+## NOTE: Python version was forced by use_python function
+```
+
+
+#### Pythonで定義した関数をR上で使う
+
+
+Python側で定義した関数を`./python/sample.py`に入れておく。\
+(最近のRstudioではFile > NewFileからPython Scriptを選べる)
+
+例えば下記。
+
+```{python, eval = F}
+import pandas as pd
+
+def pd_load_csv(path):
+  df = pd.read_csv(path)
+  return df
+  
+def pd_head(df):
+  return df.head(3)
+```
+
+これを使ってデータを変形してみる。
+
+適当なcsvを作っておいて、
+
+```{r, eval =F}
+set.seed(71)
+N <- 15
+data.frame(x = 1:N,
+           y = rnorm(N),
+           z = sample(letters[1:3], N, replace = TRUE)) %>% 
+  write.csv("data/sample1.csv", row.names = F)
+```
+
+PythonScript上で定義した関数を使って読み込む。
+
+```{r}
+source_python("python/sample.py")
+
+path <- "data/sample1.csv" 
+
+path %>% 
+  pd_load_csv() %>% 
+  pd_head3()
+```
+
+できた！
+
+#### 注意点
+
+
+ところが、どっこい、これがエラーになる。
+
+```{r, eval = F}
+path %>% 
+  pd_load_csv() %>% 
+  pd_head(3)
+```
+
+>  py_call_impl(callable, dots$args, dots$keywords) でエラー: 
+  TypeError: cannot do slice indexing on <class 'pandas.core.indexes.range.RangeIndex'> with these indexers [3.0] of <class 'float'> 
+  
+何やら`[3.0]`の`<vlass float>`で怒られていそうだ。そうかそうか、
+
+```{r, eval = F}
+path %>% 
+  pd_load_csv() %>% 
+  pd_head(3L)
+```
+
+これで動く。
+
+という訳で、Rではヨシナにしてくれている変数の型をちゃんとしないとPythonで動かないことがありますよ。
+
+#### R上でPythonのパッケージを読み込んで使う
+
+こんな事もできます。
+
+```{r}
+pd <- import("pandas")
+
+pd$array(1:4)
+```
+
+これは`pandas`ライブラリで定義された関数をR上で使っています。\
+ただ、`pandas`だと実際には読み込んだdata.frameに紐づけて、`df.head(n)`の様な書き方をするので`pd$function`が使いやすい場面はあまりありません。
+
+#### Rmdで直にPythonを打つ
+
+もっと過激になりましょう。\
+Rmarkdownを作って、下記を実行すると...
+
+````
+`r ''````{python}
+df=pd.read_csv("data/sample1.csv")
+
+df
+`r ''````
+````
+
+```{python, echo = F}
+df=pd.read_csv("data/sample1.csv" )
+df.head(3)
+```
+
+動きます。
+
+別のチャンクで先ほど定義したpandas dataframeの`df`をそのまま呼び出せます。
+
+````
+`r ''````{python}
+df.sort_values(by ='z')
+`r ''````
+````
+
+```{python, echo=F}
+df.sort_values(by ='z')
+```
+
+それどころかR側の名前空間にアクセスしてオブジェクトを引っ張ってこれます。
+
+````
+`r ''````{python}
+py_iris=r.iris
+py_iris=pd.DataFrame(py_iris)
+
+py_iris.head(3)
+`r ''````
+````
+
+
+```{python, echo=F}
+py_iris=r.iris
+py_iris=pd.DataFrame(py_iris)
+
+py_iris.head(3)
+```
+
+R側からもPythonの名前空間を呼び出してオブジェクトを取り扱えます。
+
+```{r}
+pyenv <- import_main()
+dat <- pyenv$df
+
+dat %>% head
+```
+
+ただし、コレはできない(のでPython打つときは別のIDE使った方が便利)。
+
+<img src=fig/chunk.png width=400>
+
+## まとめ
+
+・`use_python`でPythonインタープリタのPathを通そう。\
+・`source_python`でPythonで定義された関数を読み込めるよ。\
+・型注意な。\
+・R上で、`reticulate::import()`を使うとPythonパッケージも読み込める。\
+・Rmdだと、chunk内でPython打てるんだよ。\
+・chunk超えてオブジェクトも受け渡せるし、Rからも呼べる。\
+・でもプレビューできないから...使う場面...あるか...?
+
+## refs
+
+・[R MarkdownでPythonを書こう](https://rpubs.com/nakamichi_/rmd-python)
+
