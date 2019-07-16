@@ -16,6 +16,27 @@ knitr::opts_chunk$set(echo = TRUE)
 
 [^1]: 外界と隔離されていて、その中でもしヤバいことが起きても、他には影響が出ない様になっている環境
 
+
+```{bash}
+brew doctor
+brew update
+brew upgrade
+brew cleanup
+```
+
+
+```{bash}
+cd <project root>
+pipenv install
+pipenv shell
+exit
+```
+
+```{bash}
+pipenv install opencv-python
+```
+
+
 ## references
 
 ・[reticulate official](https://rstudio.github.io/reticulate/index.html)
