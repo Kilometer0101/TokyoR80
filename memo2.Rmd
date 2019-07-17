@@ -1,7 +1,7 @@
 ---
 title: "初めてのreticulate"
 author: "km"
-date: "2019/7/16"
+date: "`r Sys.Date()`"
 output: html_document
 ---
 
@@ -9,8 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(reticulate)
-
 ```
+
+##### [Python環境構築](memo.html)→初めてのreticulate(ｲﾏｺｺ)
 
 ## 要件
 
@@ -61,7 +62,7 @@ library(reticulate)
 
 #### pathを通して仮想環境を呼び出す。
 
-Pythonインタープリタのpathを変数に取っておいて呼び出す。
+使いたいPythonインタープリタのpathを変数に取っておいて呼び出す。
 
 ```{r, include=F}
 python_env <- "/Users/km/python/test/.venv/bin/python"
@@ -97,6 +98,7 @@ py_config()
 ## NOTE: Python version was forced by use_python function
 ```
 
+**注意**： 一度、Pythonのインタプリタを読み込むと、そのセッションでは異なるインタプリタを指定することはできない。切り替えたい場合はRを再起動(`command + shift + 0`)してセッションをリフレッシュする必要がある。
 
 #### Pythonで定義した関数をR上で使う
 
@@ -113,8 +115,11 @@ def pd_load_csv(path):
   df = pd.read_csv(path)
   return df
   
-def pd_head(df):
+def pd_head3(df):
   return df.head(3)
+
+def pd_head(df, n = 3):
+  return df.head(n)
 ```
 
 これを使ってデータを変形してみる。
@@ -181,7 +186,7 @@ pd$array(1:4)
 ```
 
 これは`pandas`ライブラリで定義された関数をR上で使っています。\
-ただ、`pandas`だと実際には読み込んだdata.frameに紐づけて、`df.head(n)`の様な書き方をするので`pd$function`が使いやすい場面はあまりありません。
+ただ、`pandas`だと実際には読み込んだdata.frame名を使って、`df.head(n)`といった書き方をするので`pkg$function`が使いやすい場面はあまりありません。
 
 #### Rmdで直にPythonを打つ
 
@@ -260,4 +265,10 @@ dat %>% head
 ## refs
 
 ・[R MarkdownでPythonを書こう](https://rpubs.com/nakamichi_/rmd-python)
+
+### 実行環境
+
+```{r, echo =F}
+sessionInfo()
+```
 

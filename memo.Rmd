@@ -1,7 +1,7 @@
 ---
-title: "(Rユーザーのための!?)Python環境構築"
+title: "Rユーザーのため!?のPython環境構築"
 author: "km"
-date: "2019/7/4"
+date: "`r Sys.Date()`"
 output: html_document
 ---
 
@@ -9,10 +9,20 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+##### Python環境構築(ｲﾏｺｺ)→[初めてのreticulate](memo2.html)
+
+ 
+
+##### 実行環境
+
+```{r, echo =F}
+sessioninfo::os_name()
+```
+
 ### 要件
 
 ・システムにプリインストールされているPythonと分けてインストールする事\
-・サンドボックス化[^1]された複数の環境を持てる様にする事
+・**サンドボックス化**[^1]された複数の環境を持てる様にする事
 
 [^1]: 外界と隔離されていて、その中でもしヤバいことが起きても、他には影響が出ない様になっている環境
 
@@ -83,7 +93,7 @@ brew upgrade
 brew cleanup
 ```
 
-→ command line toolsのinstallも済ませておく。
+→ command line toolsのinstallも済ませておく。(upgradeの際に入っていないと怒られるはず, `sudo xcodebuild -license`)
 
 #### python(公式)を入れる
 
@@ -152,11 +162,18 @@ pipenv install pandas
 
 `pipenv install`は、`pip`の文法と完全な互換性がある(らしいが`--proxy`が通らなかった)。
 
-現在の仮想環境にインストールされているライブラリを確認。
+現在の仮想環境にインストールされているパッケージを確認。
 
 ```{bash, eval =F}
 pipenv run pip freeze
 ```
+
+パッケージの依存関係を表示
+
+```{bash, eval=F}
+pipenv graph 
+```
+
 
 ##### Pythonインタープリタのアドレスを確認。
 
@@ -165,6 +182,8 @@ pipenv --venv
 ```
 
 このpathをR側に投げます。
+
+というわけで環境構築終わり。→[初めてのreticulate](memo2.html)
 
 ## refs
 
@@ -183,3 +202,4 @@ pipenv --venv
 ・[pyenv、pyenv-virtualenv、venv、Anaconda、Pipenv。私はPipenvを使う。](https://qiita.com/KRiver1/items/c1788e616b77a9bad4dd#pyenv)
 
 ・[pip 19.1.1 documentation](https://pip.pypa.io/en/stable/user_guide/#installing-packages)
+
