@@ -185,6 +185,16 @@ pipenv --venv
 
 というわけで環境構築終わり。→[初めてのreticulate](memo2.html)
 
+#### VScode
+
+AnacondaならspyderというIDEが使えるけど、Pipenvにすると使えない。\
+VScodeを導入する。
+
+インストールしたら、拡張機能として`Python Extension Pack`を入れる。\
+
+`.venv`を認識させるためにファイル>基本設定>設定で`"python.venvPath": ".venv",`を追加。
+
+
 ## refs
 
 ・[reticulate official](https://rstudio.github.io/reticulate/index.html)
@@ -202,4 +212,6 @@ pipenv --venv
 ・[pyenv、pyenv-virtualenv、venv、Anaconda、Pipenv。私はPipenvを使う。](https://qiita.com/KRiver1/items/c1788e616b77a9bad4dd#pyenv)
 
 ・[pip 19.1.1 documentation](https://pip.pypa.io/en/stable/user_guide/#installing-packages)
+
+・[Windows + Python 3.6 + PipEnv + Visual Studio Code でPython開発環境](https://qiita.com/youkidkk/items/b6a6e39ee3a109001c75)
 
