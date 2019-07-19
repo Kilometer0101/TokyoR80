@@ -248,9 +248,7 @@ dat <- pyenv$df
 dat %>% head
 ```
 
-ただし、コレはできない(のでPython打つときは別のIDE使った方が便利)。
 
-<img src=fig/chunk.png width=400>
 
 ## まとめ
 
@@ -260,7 +258,7 @@ dat %>% head
 ・R上で、`reticulate::import()`を使うとPythonパッケージも読み込める。\
 ・Rmdだと、chunk内でPython打てるんだよ。\
 ・chunk超えてオブジェクトも受け渡せるし、Rからも呼べる。\
-・でもプレビューできないから...使う場面...あるか...?
+・プレビューも出る!!
 
 ## refs
 

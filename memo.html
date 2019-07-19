@@ -11,7 +11,7 @@
 
 <meta name="author" content="km" />
 
-<meta name="date" content="2019-07-17" />
+<meta name="date" content="2019-07-19" />
 
 <title>Rユーザーのため!?のPython環境構築</title>
 
@@ -377,7 +377,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Rユーザーのため!?のPython環境構築</h1>
 <h4 class="author">km</h4>
-<h4 class="date">2019-07-17</h4>
+<h4 class="date">2019-07-19</h4>
 
 </div>
 
@@ -508,6 +508,14 @@ pipenv install pandas
 <p>というわけで環境構築終わり。→<a href="memo2.html">初めてのreticulate</a></p>
 </div>
 </div>
+<div id="vscode" class="section level4">
+<h4>VScode</h4>
+<p>AnacondaならspyderというIDEが使えるけど、Pipenvにすると使えない。<br />
+VScodeを導入する。</p>
+<p>インストールしたら、拡張機能として<code>Python Extension Pack</code>を入れる。<br />
+</p>
+<p><code>.venv</code>を認識させるためにファイル&gt;基本設定&gt;設定で<code>&quot;python.venvPath&quot;: &quot;.venv&quot;,</code>を追加。</p>
+</div>
 </div>
 <div id="refs" class="section level2">
 <h2>refs</h2>
@@ -519,6 +527,7 @@ pipenv install pandas
 <p>・<a href="http://onoz000.hatenablog.com/entry/2018/02/11/142347">condaとpip：混ぜるな危険</a></p>
 <p>・<a href="https://qiita.com/KRiver1/items/c1788e616b77a9bad4dd#pyenv">pyenv、pyenv-virtualenv、venv、Anaconda、Pipenv。私はPipenvを使う。</a></p>
 <p>・<a href="https://pip.pypa.io/en/stable/user_guide/#installing-packages">pip 19.1.1 documentation</a></p>
+<p>・<a href="https://qiita.com/youkidkk/items/b6a6e39ee3a109001c75">Windows + Python 3.6 + PipEnv + Visual Studio Code でPython開発環境</a></p>
 </div>
 <div class="footnotes">
 <hr />
