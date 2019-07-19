@@ -1,0 +1,62 @@
+---
+title: "Random"
+author: "km"
+date: "2019/7/19"
+output: 
+  html_document: 
+    keep_md: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(reticulate)
+python_env <- "/Users/km/python/test/.venv/bin/python"
+
+use_python(python = python_env, required = TRUE)
+```
+
+
+## uniform distribution
+
+### in R
+
+```{r}
+seed <- 71
+N <- 100000
+
+unif_R <- runif(N)
+
+unif_R %>% head(10)
+unif_R %>% mean()
+```
+
+
+### in Numpy
+
+```{python}
+import numpy as np
+
+seed = int(r.seed)
+N = int(r.N)
+
+np.random.seed(seed=seed)
+unif_np = np.random.rand(N)
+
+unif_np[:10]
+np.mean(unif_np)
+```
+
+### in Random
+
+```{python}
+import random
+
+random.seed(seed)
+
+unif_rd = np.array([random.random() for i in range(N)])
+
+unif_rd[:10]
+
+np.mean(unif_rd)
+```
