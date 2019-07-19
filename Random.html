@@ -391,10 +391,10 @@ N &lt;- 100000
 unif_R &lt;- runif(N)
 
 unif_R %&gt;% head(10)</code></pre>
-<pre><code>##  [1] 0.24692638 0.62378240 0.08519384 0.33878806 0.71709901 0.18513081
-##  [7] 0.33717573 0.29119696 0.23748727 0.16339159</code></pre>
+<pre><code>##  [1] 0.6252961 0.7893059 0.8414737 0.6412125 0.4606747 0.7140931 0.3831216
+##  [8] 0.6229473 0.3758558 0.8833103</code></pre>
 <pre class="r"><code>unif_R %&gt;% mean()</code></pre>
-<pre><code>## [1] 0.5005941</code></pre>
+<pre><code>## [1] 0.4990474</code></pre>
 </div>
 <div id="in-numpy" class="section level3">
 <h3>in Numpy</h3>
@@ -420,20 +420,24 @@ random.seed(seed)
 
 unif_rd = np.array([random.random() for i in range(N)])
 
-unif_rd[:20]</code></pre>
+unif_rd[:10]</code></pre>
 <pre><code>## array([0.32375335, 0.62002949, 0.00848   , 0.98285779, 0.82215851,
-##        0.99901979, 0.2633503 , 0.19948865, 0.05473797, 0.19380238,
-##        0.02418572, 0.69173803, 0.3656697 , 0.81556164, 0.76067203,
-##        0.34932434, 0.1667997 , 0.34767461, 0.03029517, 0.64832587])</code></pre>
+##        0.99901979, 0.2633503 , 0.19948865, 0.05473797, 0.19380238])</code></pre>
+<pre class="python"><code>np.mean(unif_rd)</code></pre>
+<pre><code>## 0.5000350862281858</code></pre>
 </div>
 <div id="in-r-1" class="section level3">
 <h3>in R</h3>
 <pre class="r"><code>seed &lt;- 71
-N &lt;- 100000
+N &lt;- 20
 
 rd &lt;- import(&quot;random&quot;)
 rd$seed(seed)
-unif_R &lt;- map_dbl(1:N, ~rd$random())</code></pre>
+map_dbl(1:N, ~rd$random())</code></pre>
+<pre><code>##  [1] 0.323753346 0.620029485 0.008479999 0.982857787 0.822158506
+##  [6] 0.999019788 0.263350301 0.199488651 0.054737975 0.193802375
+## [11] 0.024185723 0.691738028 0.365669697 0.815561641 0.760672026
+## [16] 0.349324336 0.166799702 0.347674613 0.030295174 0.648325872</code></pre>
 </div>
 <div id="in-python-random-1" class="section level3">
 <h3>in python random</h3>
@@ -442,12 +446,11 @@ N = int(r.N)
 seed = int(r.seed)
 
 random.seed(seed)
-unif_P = np.array([random.random() for i in range(N)])</code></pre>
-<pre class="r"><code>pyenv &lt;- import_main() 
-unif_P &lt;- pyenv$unif_P
-
-sum(unif_R - unif_P)</code></pre>
-<pre><code>## [1] 0</code></pre>
+np.array([random.random() for i in range(N)])</code></pre>
+<pre><code>## array([0.32375335, 0.62002949, 0.00848   , 0.98285779, 0.82215851,
+##        0.99901979, 0.2633503 , 0.19948865, 0.05473797, 0.19380238,
+##        0.02418572, 0.69173803, 0.3656697 , 0.81556164, 0.76067203,
+##        0.34932434, 0.1667997 , 0.34767461, 0.03029517, 0.64832587])</code></pre>
 </div>
 </div>
 

@@ -56,7 +56,8 @@ random.seed(seed)
 
 unif_rd = np.array([random.random() for i in range(N)])
 
-unif_rd[:20]
+unif_rd[:10]
+np.mean(unif_rd)
 ```
 
 
@@ -64,11 +65,11 @@ unif_rd[:20]
 
 ```{r}
 seed <- 71
-N <- 100000
+N <- 20
 
 rd <- import("random")
 rd$seed(seed)
-unif_R <- map_dbl(1:N, ~rd$random())
+map_dbl(1:N, ~rd$random())
 ```
 
 
@@ -80,12 +81,6 @@ N = int(r.N)
 seed = int(r.seed)
 
 random.seed(seed)
-unif_P = np.array([random.random() for i in range(N)])
+np.array([random.random() for i in range(N)])
 ```
 
-```{r}
-pyenv <- import_main() 
-unif_P <- pyenv$unif_P
-
-sum(unif_R - unif_P)
-```
