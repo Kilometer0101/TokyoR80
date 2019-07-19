@@ -47,7 +47,7 @@ unif_np[:10]
 np.mean(unif_np)
 ```
 
-### in Random
+### in python random
 
 ```{python}
 import random
@@ -56,7 +56,36 @@ random.seed(seed)
 
 unif_rd = np.array([random.random() for i in range(N)])
 
-unif_rd[:10]
+unif_rd[:20]
+```
 
-np.mean(unif_rd)
+
+### in R
+
+```{r}
+seed <- 71
+N <- 100000
+
+rd <- import("random")
+rd$seed(seed)
+unif_R <- map_dbl(1:N, ~rd$random())
+```
+
+
+### in python random
+
+```{python}
+import random
+N = int(r.N)
+seed = int(r.seed)
+
+random.seed(seed)
+unif_P = np.array([random.random() for i in range(N)])
+```
+
+```{r}
+pyenv <- import_main() 
+unif_P <- pyenv$unif_P
+
+sum(unif_R - unif_P)
 ```
