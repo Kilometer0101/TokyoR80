@@ -205,6 +205,7 @@ path_out <- "./fig/chunk1.png"
 library(magick)
 library(EBImage)
 library(imager)
+library(opencv)
 cv2 <- import("cv2")
 
 path_in <- "./fig/chunk.png"
@@ -248,6 +249,52 @@ system.time({
 
 `cv2`が一番早い。（cv2 > magick > EBImage > imager）
 
+ちなみに、Rからもopencvを使うパッケージ`opencv`があって、それも含めてちゃんと比べるとこうなる。
+
+```{r}
+library(microbenchmark)
+library(opencv)
+
+f_cv2 <- function(path_in, path_out){
+  img <- cv2$imread(path_in)
+  cv2$imwrite(path_out, img)
+}
+
+f_ocv <- function(path_in, path_out){
+  img <- ocv_read(path_in)
+  ocv_write(img, path_out)
+}
+
+
+f_magick <- function(path_in, path_out){
+  img <- image_read(path_in)
+  image_write(img, path_out)
+}
+
+f_EBImage <- function(path_in, path_out){
+  img <- readImage(path_in)
+  writeImage(img, path_out)
+}
+
+f_imager <- function(path_in, path_out){
+  img <- load.image(path_in)
+  save.image(img, path_out)
+}
+
+mbm <- microbenchmark(
+  cv2 = f_cv2(path_in, path_out),
+  ocv = f_ocv(path_in, path_out),
+  magick = f_magick(path_in, path_out),
+  EBimage = f_EBImage(path_in, path_out),
+  imager = f_imager(path_in, path_out))
+```
+
+```{r, echo=F}
+mbm
+autoplot(mbm)
+```
+
+結果：opencvパッケージのほうが早かったですね...。
 
 #### Rmdで直にPythonを打つ
 
