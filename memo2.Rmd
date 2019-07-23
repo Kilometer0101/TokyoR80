@@ -296,6 +296,51 @@ autoplot(mbm)
 
 結果：opencvパッケージのほうが早かったですね...。
 
+```{python, eval = FALSE}
+import cv2
+import time
+import numpy as np
+from matplotlib import pyplot as plt
+import seaborn as sns
+
+result = []
+for i in range(0, 100):
+  start = time.time()
+  img = cv2.imread(r.path_in)
+  cv2.imwrite(r.path_out, img)
+  time_i = np.array([time.time() - start])
+  
+  result = np.hstack((result, time_i))
+
+ax = sns.violinplot(x = result)
+
+plt.show()
+```
+
+```{python, include = FALSE}
+import cv2
+import time
+import numpy as np
+from matplotlib import pyplot as plt
+import seaborn as sns
+
+result = []
+for i in range(0, 100):
+  start = time.time()
+  img = cv2.imread(r.path_in)
+  cv2.imwrite(r.path_out, img)
+  time_i = np.array([time.time() - start])
+  
+  result = np.hstack((result, time_i))
+
+ax = sns.violinplot(x = result)
+```
+
+```{python, echo = F}
+plt.show()
+```
+
+
 #### Rmdで直にPythonを打つ
 
 もっと過激になりましょう。\
