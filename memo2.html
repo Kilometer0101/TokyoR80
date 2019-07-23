@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="km" />
 
-<meta name="date" content="2019-07-19" />
+<meta name="date" content="2019-07-22" />
 
 <title>初めてのreticulate</title>
 
@@ -344,18 +345,6 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
@@ -377,7 +366,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">初めてのreticulate</h1>
 <h4 class="author">km</h4>
-<h4 class="date">2019-07-19</h4>
+<h4 class="date">2019-07-22</h4>
 
 </div>
 
@@ -499,7 +488,44 @@ pd$array(1:4)</code></pre>
 ## [1, 2, 3, 4]
 ## Length: 4, dtype: int64</code></pre>
 <p>これは<code>pandas</code>ライブラリで定義された関数をR上で使っています。<br />
-ただ、<code>pandas</code>だと実際には読み込んだdata.frame名を使って、<code>df.head(n)</code>といった書き方をするので<code>pkg$function</code>が使いやすい場面はあまりありません。</p>
+ただ、<code>pandas</code>だと実際には読み込んだdata.frame名を使って、<code>df.head(n)</code>といった書き方をするので<code>pd$function</code>が使いやすい場面はあまりありません。</p>
+<p>別の例ですが、opencv-python(<code>cv2</code>)を使って、画像の呼び出し・書き込みを行えます。Rの画像処理パッケージ三銃士（<code>magick</code>, <code>EBImage</code>, <code>imager</code>)を使った読み書きの実行時間を調べると…</p>
+<pre class="r"><code>library(magick)
+library(EBImage)
+library(imager)
+cv2 &lt;- import(&quot;cv2&quot;)
+
+path_in &lt;- &quot;./fig/chunk.png&quot;
+path_out &lt;- &quot;./fig/chunk1.png&quot;</code></pre>
+<pre class="r"><code>## OpenCV
+system.time({
+  img &lt;- cv2$imread(path_in)
+  cv2$imwrite(path_out, img)
+})</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.054   0.011   0.064</code></pre>
+<pre class="r"><code>## magick
+system.time({
+  img &lt;- image_read(path_in)
+  image_write(img, path_out)
+})</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.072   0.001   0.073</code></pre>
+<pre class="r"><code>## EBImage
+system.time({
+  img &lt;- readImage(path_in)
+  writeImage(img, path_out)
+})</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.347   0.026   0.374</code></pre>
+<pre class="r"><code>## magick
+system.time({
+  img &lt;- load.image(path_in)
+  save.image(img, path_out)
+})</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.429   0.043   0.473</code></pre>
+<p><code>cv2</code>が一番早い。（cv2 &gt; magick &gt; EBImage &gt; imager）</p>
 </div>
 <div id="rmdpython" class="section level4">
 <h4>Rmdで直にPythonを打つ</h4>
@@ -590,23 +616,33 @@ dat %&gt;% head</code></pre>
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] reticulate_1.12 forcats_0.4.0   stringr_1.4.0   dplyr_0.8.0.1  
-##  [5] purrr_0.3.2     readr_1.3.1     tidyr_0.8.3     tibble_2.1.1   
-##  [9] ggplot2_3.1.0   tidyverse_1.2.1
+##  [1] imager_0.41.2   magrittr_1.5    EBImage_4.23.2  magick_2.0     
+##  [5] reticulate_1.12 forcats_0.4.0   stringr_1.4.0   dplyr_0.8.3    
+##  [9] purrr_0.3.2     readr_1.3.1     tidyr_0.8.3     tibble_2.1.3   
+## [13] ggplot2_3.2.0   tidyverse_1.2.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.1       cellranger_1.1.0 pillar_1.3.1     compiler_3.6.1  
-##  [5] plyr_1.8.4       tools_3.6.1      digest_0.6.18    lubridate_1.7.4 
-##  [9] jsonlite_1.6     evaluate_0.13    nlme_3.1-140     gtable_0.2.0    
-## [13] lattice_0.20-38  pkgconfig_2.0.2  rlang_0.3.1      Matrix_1.2-17   
-## [17] cli_1.0.1        rstudioapi_0.9.0 yaml_2.2.0       haven_2.1.0     
-## [21] xfun_0.5         withr_2.1.2      xml2_1.2.0       httr_1.4.0      
-## [25] knitr_1.22       hms_0.4.2        generics_0.0.2   grid_3.6.1      
-## [29] tidyselect_0.2.5 glue_1.3.1       R6_2.4.0         readxl_1.3.1    
-## [33] rmarkdown_1.12   modelr_0.1.4     magrittr_1.5     backports_1.1.3 
-## [37] scales_1.0.0     htmltools_0.3.6  rvest_0.3.2      assertthat_0.2.0
-## [41] colorspace_1.4-1 stringi_1.4.3    lazyeval_0.2.2   munsell_0.5.0   
-## [45] broom_0.5.1      crayon_1.3.4</code></pre>
+##  [1] Rcpp_1.0.1          locfit_1.5-9.1      lubridate_1.7.4    
+##  [4] lattice_0.20-38     fftwtools_0.9-8     png_0.1-7          
+##  [7] assertthat_0.2.1    zeallot_0.1.0       digest_0.6.20      
+## [10] R6_2.4.0            tiff_0.1-5          cellranger_1.1.0   
+## [13] plyr_1.8.4          backports_1.1.4     evaluate_0.14      
+## [16] httr_1.4.0          pillar_1.4.2        rlang_0.4.0        
+## [19] lazyeval_0.2.2      readxl_1.3.1        rstudioapi_0.10    
+## [22] bmp_0.3             Matrix_1.2-17       rmarkdown_1.14.1   
+## [25] htmlwidgets_1.3     igraph_1.2.4.1      RCurl_1.95-4.12    
+## [28] munsell_0.5.0       broom_0.5.2         compiler_3.6.1     
+## [31] modelr_0.1.4        xfun_0.8            pkgconfig_2.0.2    
+## [34] BiocGenerics_0.30.0 htmltools_0.3.6     readbitmap_0.1.5   
+## [37] tidyselect_0.2.5    crayon_1.3.4        withr_2.1.2        
+## [40] bitops_1.0-6        grid_3.6.1          nlme_3.1-140       
+## [43] jsonlite_1.6        gtable_0.3.0        scales_1.0.0       
+## [46] cli_1.1.0           stringi_1.4.3       xml2_1.2.0         
+## [49] vctrs_0.2.0         generics_0.0.2      tools_3.6.1        
+## [52] glue_1.3.1          hms_0.5.0           jpeg_0.1-8         
+## [55] abind_1.4-5         parallel_3.6.1      yaml_2.2.0         
+## [58] colorspace_1.4-1    rvest_0.3.4         knitr_1.23         
+## [61] haven_2.1.1</code></pre>
 </div>
 </div>
 
@@ -627,6 +663,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

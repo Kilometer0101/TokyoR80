@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="km" />
 
-<meta name="date" content="2019-07-19" />
+<meta name="date" content="2019-07-22" />
 
 <title>Rユーザーのため!?のPython環境構築</title>
 
@@ -344,18 +345,6 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
@@ -377,7 +366,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Rユーザーのため!?のPython環境構築</h1>
 <h4 class="author">km</h4>
-<h4 class="date">2019-07-19</h4>
+<h4 class="date">2019-07-22</h4>
 
 </div>
 
@@ -406,7 +395,7 @@ $(document).ready(function () {
 <h4>Anacondaの話</h4>
 <p>１つの解決策として、<code>Anaconda</code>に全てを委ねる、というものがある。<br />
 仮想環境をpythonのバージョンを指定して作ると、一緒にある程度の基礎的なパッケージ群をまとめてインストールしてくれるのでストレスが少ない。切り替えも簡単。(A)仮想環境の管理を担う<code>pyenv</code>との相性がいい。などなど良いことづくめ。Pythonを使う様になって2年以上(Anaconda + pyenv)のセットアップを使ってきた。</p>
-<p>問題は、(B)パッケージ管理ツールとして独自の<code>conda</code>を使っていること。のみならず、<code>pip</code>も使えること。<code>conda</code>それ自体は悪くないのだけど、<code>pip</code>に比べて対応するパッケージやバージョンの範囲が狭いので、痒いところに手を届かそうとすると<code>pip</code>を使うことになる。これが事故のものとで<code>conda</code>と<code>pip</code>の相性は最悪で、結局のところ<code>Anaconda</code>はサンドボックス環境としてきちんと閉じていないという問題が残る。</p>
+<p>問題は、(B)パッケージ管理ツールとして独自の<code>conda</code>を使っていること。のみならず、<code>pip</code>も使えること。<code>conda</code>それ自体は悪くないのだけど、<code>pip</code>に比べて対応するパッケージやバージョンの範囲が狭いので、痒いところに手を届かそうとすると<code>pip</code>を使うことになる。これが事故のものとで<code>conda</code>と<code>pip</code>の相性は最悪で、コンフリクトが生じると該当の仮想環境のみならずAnacondaで管理している全環境(のパッケージ依存関係)が壊れる可能性がある。結局のところ<code>Anaconda</code>はサンドボックス環境としてきちんと閉じていないという問題が残る。</p>
 </div>
 <div id="virtualenv" class="section level4">
 <h4>virtualenvの話</h4>
@@ -496,7 +485,7 @@ pipenv install pandas
 その内容に基づいて詳細な情報を<strong>自動で</strong><code>Pipfile.lock</code>に加える。(このプロセスが自動である事が大切)</p>
 <p>・<code>Pipfile</code>の中の<code>[packages]</code>に追記されていることを確認する。<br />
 ・<code>Pipfile.lock</code>の内容も追加されていることを確認する。</p>
-<p><code>pipenv install</code>は、<code>pip</code>の文法と完全な互換性がある(らしいが<code>--proxy</code>が通らなかった)。</p>
+<p><code>pipenv install</code>は、<code>pip</code>の文法と完全な互換性がある(らしいが<code>--proxy</code>が通らなかった: <code>export</code>でPROXYのpathを指定する)。</p>
 <p>現在の仮想環境にインストールされているパッケージを確認。</p>
 <pre class="bash"><code>pipenv run pip freeze</code></pre>
 <p>パッケージの依存関係を表示</p>
@@ -553,6 +542,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

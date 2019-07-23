@@ -186,7 +186,68 @@ pd$array(1:4)
 ```
 
 これは`pandas`ライブラリで定義された関数をR上で使っています。\
-ただ、`pandas`だと実際には読み込んだdata.frame名を使って、`df.head(n)`といった書き方をするので`pkg$function`が使いやすい場面はあまりありません。
+ただ、`pandas`だと実際には読み込んだdata.frame名を使って、`df.head(n)`といった書き方をするので`pd$function`が使いやすい場面はあまりありません。
+
+別の例ですが、opencv-python(`cv2`)を使って、画像の呼び出し・書き込みを行えます。Rの画像処理パッケージ三銃士（`magick`, `EBImage`, `imager`)を使った読み書きの実行時間を調べると...
+
+```{r, eval = F}
+library(magick)
+library(EBImage)
+library(imager)
+cv2 <- import("cv2")
+
+path_in <- "./fig/chunk.png"
+path_out <- "./fig/chunk1.png"
+
+```
+
+```{r, include=F}
+library(magick)
+library(EBImage)
+library(imager)
+cv2 <- import("cv2")
+
+path_in <- "./fig/chunk.png"
+path_out <- "./fig/chunk1.png"
+
+```
+
+```{r, eval=F}
+## OpenCV
+system.time({
+  img <- cv2$imread(path_in)
+  cv2$imwrite(path_out, img)
+})
+```
+
+
+```{r, echo=F}
+system.time({
+img <- cv2$imread(path_in)
+cv2$imwrite(path_out, img)
+})
+```
+
+```{r, eval = T}
+## magick
+system.time({
+  img <- image_read(path_in)
+  image_write(img, path_out)
+})
+## EBImage
+system.time({
+  img <- readImage(path_in)
+  writeImage(img, path_out)
+})
+## magick
+system.time({
+  img <- load.image(path_in)
+  save.image(img, path_out)
+})
+```
+
+`cv2`が一番早い。（cv2 > magick > EBImage > imager）
+
 
 #### Rmdで直にPythonを打つ
 
