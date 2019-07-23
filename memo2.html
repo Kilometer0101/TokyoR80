@@ -12,7 +12,7 @@
 
 <meta name="author" content="km" />
 
-<meta name="date" content="2019-07-22" />
+<meta name="date" content="2019-07-23" />
 
 <title>初めてのreticulate</title>
 
@@ -366,7 +366,7 @@ summary {
 
 <h1 class="title toc-ignore">初めてのreticulate</h1>
 <h4 class="author">km</h4>
-<h4 class="date">2019-07-22</h4>
+<h4 class="date">2019-07-23</h4>
 
 </div>
 
@@ -503,7 +503,7 @@ system.time({
   cv2$imwrite(path_out, img)
 })</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.054   0.011   0.064</code></pre>
+##   0.058   0.013   0.072</code></pre>
 <pre class="r"><code>## magick
 system.time({
   img &lt;- image_read(path_in)
@@ -517,14 +517,14 @@ system.time({
   writeImage(img, path_out)
 })</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.347   0.026   0.374</code></pre>
-<pre class="r"><code>## magick
+##   0.353   0.028   0.383</code></pre>
+<pre class="r"><code>## imager
 system.time({
   img &lt;- load.image(path_in)
   save.image(img, path_out)
 })</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.429   0.043   0.473</code></pre>
+##   0.426   0.042   0.471</code></pre>
 <p><code>cv2</code>が一番早い。（cv2 &gt; magick &gt; EBImage &gt; imager）</p>
 </div>
 <div id="rmdpython" class="section level4">

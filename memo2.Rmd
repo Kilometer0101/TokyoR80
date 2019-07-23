@@ -239,7 +239,7 @@ system.time({
   img <- readImage(path_in)
   writeImage(img, path_out)
 })
-## magick
+## imager
 system.time({
   img <- load.image(path_in)
   save.image(img, path_out)
