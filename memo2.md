@@ -28,7 +28,7 @@ pipenv shell        # 環境に入る
 pipenv --venv       # pathを確認
 ```
 
-Macでは`<hoe>/project/.venv`となる。\
+Macでは`<hoe>/project/.venv`となる。
 
 インタープリタのアドレスは`<hoe>/project/.venv/bin/python`となる。
 
@@ -51,11 +51,18 @@ pipenv install numpy
 
 ## R側の準備
 
+パッケージのインストール
+
 
 ```r
-install.packages("tidyverse")   # 初心者は黙って入れよう
+install.packages("tidyverse")   # 初心者は黙って入れよう 上級者はお好きに
 install.packages("reticulate")  # R上でPythonを呼び出すインターフェース
+```
 
+インストールされているパッケージにattach
+
+
+```r
 library(tidyverse)
 library(reticulate)
 ```
@@ -99,9 +106,9 @@ py_config()
 ## NOTE: Python version was forced by use_python function
 ```
 
-**注意**： 一度、Pythonのインタプリタを読み込むと、そのセッションでは異なるインタプリタを指定することはできない。切り替えたい場合はRを再起動(`command + shift + 0`)してセッションをリフレッシュする必要がある。
+**注意**： 一度、Pythonのインタプリタを読み込むと、そのセッションでは異なるインタプリタを上書きして指定することはできない。切り替えたい場合はRを再起動(`command + shift + 0`)するなどして、セッションをリフレッシュする必要がある。
 
-また、インタープリタの読み込みにはAnacondaに対応した`use_condaenv`や、virturalenvに対応した`use_virtualenv`という専用の関数があるが、ここでは推奨しない。
+また、インタープリタの読み込みにはAnacondaに対応した`use_condaenv`や、virturalenvに対応した`use_virtualenv`という専用の関数があるが、ここでは推奨しない（Piperを使っていれば不要）。
 
 #### Pythonで定義した関数をR上で使う
 
@@ -188,7 +195,7 @@ path %>%
 
 これ(整数型指定)で動く。
 
-という訳で、Rではヨシナにしてくれている変数の型をちゃんとしないとPythonで動かないことがありますよ。
+Rではヨシナにしてくれている変数の型をちゃんとしないとPythonで動かないことがありますよというヤツ。
 
 #### R上でPythonのパッケージを読み込んで使う
 
@@ -237,7 +244,7 @@ cv2$imwrite(path_out, img)
 
 ```
 ##    user  system elapsed 
-##   0.053   0.011   0.064
+##   0.052   0.010   0.064
 ```
 
 
@@ -250,7 +257,7 @@ image_write(img, path_out)
 
 ```
 ##    user  system elapsed 
-##   0.072   0.002   0.073
+##   0.072   0.001   0.073
 ```
 
 
@@ -263,7 +270,7 @@ writeImage(img, path_out)
 
 ```
 ##    user  system elapsed 
-##   0.340   0.029   0.370
+##   0.367   0.031   0.399
 ```
 
 
@@ -276,7 +283,7 @@ save.image(img, path_out)
 
 ```
 ##    user  system elapsed 
-##   0.416   0.041   0.458
+##   0.415   0.039   0.454
 ```
 
 `cv2`が一番早い。（cv2 > magick > EBImage > imager）
@@ -326,20 +333,20 @@ mbm <- microbenchmark(
 ```
 ## Unit: milliseconds
 ##            expr       min        lq      mean    median        uq
-##           r_ocv  17.57504  18.12179  18.67384  18.61217  18.88830
-##  reticulate_cv2  38.10613  41.67716  52.27269  44.44367  47.96697
-##          magick  71.24535  73.69534  75.91171  75.63470  77.69121
-##         EBimage 131.54845 142.01436 170.42686 148.84792 166.26830
-##          imager 213.38430 297.80013 334.85693 335.90137 367.73534
+##           r_ocv  17.56127  18.11191  18.73587  18.71679  19.15926
+##  reticulate_cv2  37.06164  41.03496  50.36806  45.38421  48.25362
+##          magick  71.47012  72.94706  75.17603  74.51553  77.33658
+##         EBimage 130.86483 138.94968 169.60885 147.69904 174.29747
+##          imager 227.67503 263.68903 321.41727 326.41989 353.26836
 ##        max neval   cld
-##   20.89340   100 a    
-##  176.41652   100  b   
-##   85.72428   100   c  
-##  277.11651   100    d 
-##  481.53625   100     e
+##   20.59911   100 a    
+##  171.87491   100  b   
+##   80.64072   100   c  
+##  275.23091   100    d 
+##  472.26070   100     e
 ```
 
-![](memo2_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+![](memo2_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
 
 結果：opencvパッケージのほうが早かったですね...。
 
@@ -364,7 +371,7 @@ for i in range(0, 100):
 
 これを含めて比べてみると、こうなる。
 
-![](memo2_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
+![](memo2_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
 
 pythonからopencv打った方がRのopencv pkgよりちょっとだけ早いけどほぼ同等。
 
@@ -382,6 +389,13 @@ pythonからopencv打った方がRのopencv pkgよりちょっとだけ早いけ
 Rmarkdownを作って、下記を実行すると...
 
 ````
+```{r}
+library(reticulate)
+
+python_env <- "<hoge>/project/.venv/bin/python"
+use_python(python = python_env, required = TRUE)
+```
+
 ```{python}
 df=pd.read_csv("data/sample1.csv")
 
@@ -603,5 +617,5 @@ Pyperを使ってPython上でRを動かすより、reticulateを使ってR上で
 ## Darwin-18.2.0-x86_64-i386-64bit
 ## 12 logical CPU cores, i386
 ## -----
-## Session information updated at 2019-07-24 13:09
+## Session information updated at 2019-07-24 13:32
 ```

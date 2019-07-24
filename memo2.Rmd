@@ -31,7 +31,7 @@ pipenv shell        # 環境に入る
 pipenv --venv       # pathを確認
 ```
 
-Macでは`<hoe>/project/.venv`となる。\
+Macでは`<hoe>/project/.venv`となる。
 
 インタープリタのアドレスは`<hoe>/project/.venv/bin/python`となる。
 
@@ -52,10 +52,16 @@ pipenv install numpy
 
 ## R側の準備
 
-```{r, eval = F}
-install.packages("tidyverse")   # 初心者は黙って入れよう
-install.packages("reticulate")  # R上でPythonを呼び出すインターフェース
+パッケージのインストール
 
+```{r, eval = F}
+install.packages("tidyverse")   # 初心者は黙って入れよう 上級者はお好きに
+install.packages("reticulate")  # R上でPythonを呼び出すインターフェース
+```
+
+インストールされているパッケージにattach
+
+```{r, eval = F}
 library(tidyverse)
 library(reticulate)
 ```
@@ -100,9 +106,9 @@ py_config()
 ## NOTE: Python version was forced by use_python function
 ```
 
-**注意**： 一度、Pythonのインタプリタを読み込むと、そのセッションでは異なるインタプリタを指定することはできない。切り替えたい場合はRを再起動(`command + shift + 0`)してセッションをリフレッシュする必要がある。
+**注意**： 一度、Pythonのインタプリタを読み込むと、そのセッションでは異なるインタプリタを上書きして指定することはできない。切り替えたい場合はRを再起動(`command + shift + 0`)するなどして、セッションをリフレッシュする必要がある。
 
-また、インタープリタの読み込みにはAnacondaに対応した`use_condaenv`や、virturalenvに対応した`use_virtualenv`という専用の関数があるが、ここでは推奨しない。
+また、インタープリタの読み込みにはAnacondaに対応した`use_condaenv`や、virturalenvに対応した`use_virtualenv`という専用の関数があるが、ここでは推奨しない（Piperを使っていれば不要）。
 
 #### Pythonで定義した関数をR上で使う
 
@@ -177,7 +183,7 @@ path %>%
 
 これ(整数型指定)で動く。
 
-という訳で、Rではヨシナにしてくれている変数の型をちゃんとしないとPythonで動かないことがありますよ。
+Rではヨシナにしてくれている変数の型をちゃんとしないとPythonで動かないことがありますよというヤツ。
 
 #### R上でPythonのパッケージを読み込んで使う
 
@@ -381,6 +387,13 @@ pythonからopencv打った方がRのopencv pkgよりちょっとだけ早いけ
 Rmarkdownを作って、下記を実行すると...
 
 ````
+`r ''````{r}
+library(reticulate)
+
+python_env <- "<hoge>/project/.venv/bin/python"
+use_python(python = python_env, required = TRUE)
+`r ''````
+
 `r ''````{python}
 df=pd.read_csv("data/sample1.csv")
 
