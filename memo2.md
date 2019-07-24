@@ -1,17 +1,13 @@
 ---
 title: "初めてのreticulate"
 author: "km"
-date: "`r Sys.Date()`"
+date: "2019-07-24"
 output: 
   html_document: 
     keep_md: TRUE
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-library(reticulate)
-```
+
 
 ##### [Python環境構築](memo.html)→初めてのreticulate(ｲﾏｺｺ)
 
@@ -25,7 +21,8 @@ library(reticulate)
 
 `Pipenv`で作った仮想環境が入ったフォルダに移動し、インタープリタのpathを確認。
 
-```{bash, eval = F}
+
+```bash
 cd <hoge>/project   # 移動
 pipenv shell        # 環境に入る
 pipenv --venv       # pathを確認
@@ -37,7 +34,8 @@ Macでは`<hoe>/project/.venv`となる。\
 
 仮想環境中にインストールされているパッケージを確認。
 
-```{bash, eval =F}
+
+```bash
 pipenv run pip freeze
 ```
 
@@ -45,14 +43,16 @@ pipenv run pip freeze
 
 ない場合は、インストールしておく。
 
-```{bash, eval = F}
+
+```bash
 pipenv install numpy
 ```
 
 
 ## R側の準備
 
-```{r, eval = F}
+
+```r
 install.packages("tidyverse")   # 初心者は黙って入れよう
 install.packages("reticulate")  # R上でPythonを呼び出すインターフェース
 
@@ -66,13 +66,10 @@ library(reticulate)
 
 使いたいPythonインタープリタのpathを変数に取っておいて呼び出す。
 
-```{r, include=F}
-python_env <- "/Users/km/python/test/.venv/bin/python"
 
-use_python(python = python_env, required = TRUE)
-```
 
-```{r, eval=F}
+
+```r
 python_env <- "<hoge>/project/.venv/bin/python"
 
 use_python(python = python_env, required = TRUE)
@@ -82,13 +79,15 @@ use_python(python = python_env, required = TRUE)
 確認。
 
 
-```{r, eval = F}
+
+```r
 py_config()
 ```
 
 こんな感じの出力になる(はず)。
 
-```{eval = F}
+
+```eval
 ## python:         <hoge>/project/.venv/bin/python
 ## libpython:      /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/config-3.7...
 ## pythonhome:     /Library/Frameworks/Python.framework/Versions/3.7:/Library/...
@@ -112,7 +111,8 @@ Python側で定義した関数を`./python/sample.py`に入れておく。\
 
 例えば下記。
 
-```{python, eval = F}
+
+```python
 import pandas as pd
 
 def pd_load_csv(path):
@@ -130,7 +130,8 @@ def pd_head(df, n = 3):
 
 適当なcsvを作っておいて、
 
-```{r, eval =F}
+
+```r
 set.seed(71)
 N <- 15
 data.frame(x = 1:N,
@@ -141,7 +142,8 @@ data.frame(x = 1:N,
 
 PythonScript上で定義した関数を使って読み込む。
 
-```{r}
+
+```r
 source_python("python/sample.py")
 
 path <- "data/sample1.csv" 
@@ -151,6 +153,13 @@ path %>%
   pd_head3()
 ```
 
+```
+##   x          y z
+## 1 1 -0.4318422 a
+## 2 2 -0.4471872 b
+## 3 3 -0.4785726 c
+```
+
 できた！
 
 #### 注意点
@@ -158,7 +167,8 @@ path %>%
 
 ところが、どっこい、これ↓がエラーになる。
 
-```{r, eval = F}
+
+```r
 path %>% 
   pd_load_csv() %>% 
   pd_head(3)
@@ -169,7 +179,8 @@ path %>%
   
 何やら`[3.0]`の`<vlass float>`で怒られていそうだ。そうかそうか、
 
-```{r, eval = F}
+
+```r
 path %>% 
   pd_load_csv() %>% 
   pd_head(3L)
@@ -183,10 +194,17 @@ path %>%
 
 例えば、こんな事もできます。
 
-```{r}
+
+```r
 pd <- import("pandas")
 
 pd$array(1:4)
+```
+
+```
+## <PandasArray>
+## [1, 2, 3, 4]
+## Length: 4, dtype: int64
 ```
 
 これは`pandas`ライブラリで定義された関数をR上で使っています。\
@@ -196,7 +214,8 @@ pd$array(1:4)
 
 別の例ですが、opencv-python(`cv2`)を使って、画像の呼び出し・書き込みを行えます。Rの画像処理パッケージ三銃士（`magick`, `EBImage`, `imager`)を使った読み書きの実行時間を調べると...
 
-```{r, eval = F}
+
+```r
 library(magick)
 library(EBImage)
 library(imager)
@@ -204,77 +223,68 @@ cv2 <- import("cv2")
 
 path_in <- "./fig/chunk.png"
 path_out <- "./fig/chunk1.png"
-
 ```
 
-```{r, include=F}
-library(magick)
-library(EBImage)
-library(imager)
-library(opencv)
-cv2 <- import("cv2")
 
-path_in <- "./fig/chunk.png"
-path_out <- "./fig/chunk1.png"
-```
 
-```{r, eval = F}
+
+```r
 ## OpenCV
 img <- cv2$imread(path_in)
 cv2$imwrite(path_out, img)
 ```
 
-```{r, eval=T, echo = F}
-system.time({
-  img <- cv2$imread(path_in)
-  cv2$imwrite(path_out, img)
-})
+
+```
+##    user  system elapsed 
+##   0.053   0.011   0.064
 ```
 
-```{r, eval = F}
+
+```r
 ## magick
 img <- image_read(path_in)
 image_write(img, path_out)
 ```
 
-```{r, eval=T, echo = F}
-system.time({
-  img <- image_read(path_in)
-  image_write(img, path_out)
-})
+
+```
+##    user  system elapsed 
+##   0.072   0.002   0.073
 ```
 
-```{r, eval = F}
+
+```r
 ## EBImage
 img <- readImage(path_in)
 writeImage(img, path_out)
 ```
 
-```{r, echo=F}
-system.time({
-  img <- readImage(path_in)
-  writeImage(img, path_out)
-})
+
+```
+##    user  system elapsed 
+##   0.340   0.029   0.370
 ```
 
-```{r, eval = F}
+
+```r
 ## imager
 img <- load.image(path_in)
 save.image(img, path_out)
 ```
 
-```{r, echo=F}
-system.time({
-  img <- load.image(path_in)
-  save.image(img, path_out)
-})
+
+```
+##    user  system elapsed 
+##   0.416   0.041   0.458
 ```
 
 `cv2`が一番早い。（cv2 > magick > EBImage > imager）
 
 ちなみに、Rからもopencvを使うパッケージ`opencv`があって、それも含めてちゃんと比べるとこうなる。
 
-```{r}
+
+```r
 library(microbenchmark)
 library(opencv)
 
@@ -312,16 +322,31 @@ mbm <- microbenchmark(
   imager = f_imager(path_in, path_out))
 ```
 
-```{r, echo=F, warning=F, message=F}
-mbm
-autoplot(mbm)
+
 ```
+## Unit: milliseconds
+##            expr       min        lq      mean    median        uq
+##           r_ocv  17.57504  18.12179  18.67384  18.61217  18.88830
+##  reticulate_cv2  38.10613  41.67716  52.27269  44.44367  47.96697
+##          magick  71.24535  73.69534  75.91171  75.63470  77.69121
+##         EBimage 131.54845 142.01436 170.42686 148.84792 166.26830
+##          imager 213.38430 297.80013 334.85693 335.90137 367.73534
+##        max neval   cld
+##   20.89340   100 a    
+##  176.41652   100  b   
+##   85.72428   100   c  
+##  277.11651   100    d 
+##  481.53625   100     e
+```
+
+![](memo2_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
 結果：opencvパッケージのほうが早かったですね...。
 
 ちなみに直接Pythonでベンチマークをとるのはこんな感じで、
 
-```{python, eval = FALSE}
+
+```python
 import cv2
 import time
 import numpy as np
@@ -335,35 +360,11 @@ for i in range(0, 100):
   result = [result, time_i]
 ```
 
-```{python, include = FALSE}
-import cv2
-import time
-import numpy as np
-from matplotlib import pyplot as plt
-import seaborn as sns
 
-result = []
-for i in range(0, 100):
-  start = time.time()
-  img = cv2.imread(r.path_in)
-  cv2.imwrite(r.path_out, img)
-  time_i = np.array([time.time() - start])
-  
-  result = np.hstack((result, time_i))
-```
 
 これを含めて比べてみると、こうなる。
 
-```{r, echo = F}
-pyenv <- import_main()
-pyenv$result %>% data.frame(expr = "py_ocv", time = .) %>%
-  rbind(mbm %>% data.frame %>% mutate(time = time/10^9)) %>% 
-  ggplot(aes(expr, log(time)))+
-  geom_violin()+
-  theme(axis.title.y = element_blank())+
-  ylab("log(time[sec])")+
-  coord_flip()
-```
+![](memo2_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
 
 pythonからopencv打った方がRのopencv pkgよりちょっとだけ早いけどほぼ同等。
 
@@ -381,16 +382,19 @@ pythonからopencv打った方がRのopencv pkgよりちょっとだけ早いけ
 Rmarkdownを作って、下記を実行すると...
 
 ````
-`r ''````{python}
+```{python}
 df=pd.read_csv("data/sample1.csv")
 
 df
-`r ''````
+```
 ````
 
-```{python, echo = F}
-df=pd.read_csv("data/sample1.csv" )
-df.head(3)
+
+```
+##    x         y  z
+## 0  1 -0.431842  a
+## 1  2 -0.447187  b
+## 2  3 -0.478573  c
 ```
 
 動きます。
@@ -400,41 +404,69 @@ df.head(3)
 別のチャンクで先ほど定義したpandas dataframeの`df`をそのまま呼び出せます。
 
 ````
-`r ''````{python}
+```{python}
 df.sort_values(by ='z')
-`r ''````
+```
 ````
 
-```{python, echo=F}
-df.sort_values(by ='z')
+
+```
+##      x         y  z
+## 0    1 -0.431842  a
+## 3    4  0.417145  a
+## 7    8  1.003284  a
+## 9   10  1.263431  a
+## 12  13 -0.866655  a
+## 1    2 -0.447187  b
+## 6    7 -1.072286  b
+## 8    9 -1.108478  b
+## 10  11  0.292951  b
+## 11  12  0.548275  b
+## 13  14 -0.210263  b
+## 14  15 -0.527165  b
+## 2    3 -0.478573  c
+## 4    5 -0.417901  c
+## 5    6 -1.187164  c
 ```
 
 それどころかR側の名前空間にアクセスしてオブジェクトを引っ張ってこれます。
 
 ````
-`r ''````{python}
-py_iris=r.iris
-py_iris=pd.DataFrame(py_iris)
-
-py_iris.head(3)
-`r ''````
-````
-
-
-```{python, echo=F}
+```{python}
 py_iris=r.iris
 py_iris=pd.DataFrame(py_iris)
 
 py_iris.head(3)
 ```
+````
+
+
+
+```
+##    Sepal.Length  Sepal.Width  Petal.Length  Petal.Width Species
+## 0           5.1          3.5           1.4          0.2  setosa
+## 1           4.9          3.0           1.4          0.2  setosa
+## 2           4.7          3.2           1.3          0.2  setosa
+```
 
 R側からもPythonの名前空間を呼び出してオブジェクトを取り扱えます。
 
-```{r}
+
+```r
 pyenv <- import_main()
 dat <- pyenv$df
 
 dat %>% head
+```
+
+```
+##   x          y z
+## 1 1 -0.4318422 a
+## 2 2 -0.4471872 b
+## 3 3 -0.4785726 c
+## 4 4  0.4171454 a
+## 5 5 -0.4179006 c
+## 6 6 -1.1871639 c
 ```
 
 
@@ -446,7 +478,8 @@ dat %>% head
 
 #### Rで乱数生成
 
-```{r}
+
+```r
 seed <- 71
 N <- 10
 
@@ -454,9 +487,15 @@ set.seed(seed)
 runif(N, 0, 1)
 ```
 
+```
+##  [1] 0.3329281 0.5551039 0.3273700 0.2116670 0.3161214 0.9472664 0.6617140
+##  [8] 0.8894212 0.3380099 0.4347503
+```
+
 #### Python上でPyperを使ってRによる乱数生成を実行
 
-```{python, eval = F}
+
+```python
 import pyper
 
 r = pyper.R()
@@ -466,23 +505,19 @@ result = r.get("unif_r")
 result
 ```
 
-```{python, include = F}
-import pyper
 
-r = pyper.R()
-r("set.seed(71); unif_r <- runif(10, 0, 1)")
 
-result = r.get("unif_r")
+
 ```
-
-```{python, echo = F}
-result
+## array([0.33292806, 0.55510387, 0.32736996, 0.21166696, 0.31612136,
+##        0.94726643, 0.66171397, 0.88942116, 0.33800988, 0.43475031])
 ```
 
 #### Python上で乱数生成
 
 
-```{python}
+
+```python
 import random
 seed = int(r.seed)
 N = int(r.N)
@@ -494,14 +529,25 @@ unif_rd = np.array([random.random() for i in range(N)])
 unif_rd
 ```
 
+```
+## array([0.32375335, 0.62002949, 0.00848   , 0.98285779, 0.82215851,
+##        0.99901979, 0.2633503 , 0.19948865, 0.05473797, 0.19380238])
+```
+
 #### R上でreticulateを使ってPythonの乱数生成を実行
 
-```{r}
+
+```r
 library(reticulate)
 rd <- import("random")
 
 rd$seed(seed)
 map_dbl(1:N, ~rd$random())
+```
+
+```
+##  [1] 0.323753346 0.620029485 0.008479999 0.982857787 0.822158506
+##  [6] 0.999019788 0.263350301 0.199488651 0.054737975 0.193802375
 ```
 
 Pyperを使ってPython上でRを動かすより、reticulateを使ってR上でPythonを動かす方が何かと楽。
@@ -522,12 +568,40 @@ Pyperを使ってPython上でRを動かすより、reticulateを使ってR上で
 
 ### 実行環境
 
-```{r, echo =F}
-sessioninfo::os_name()
-sessioninfo::package_info(c("opencv", "EBImage", "magick", "imager", "reticulate", "tidyverse", "ggplot2", "purrr", "tidyr", "dplyr"), dependencies = FALSE)
+
+```
+## [1] "macOS Mojave 10.14.3"
 ```
 
-```{python, echo = F}
-from sinfo import sinfo
-sinfo()
+```
+##  package    * version  date       lib source                          
+##  dplyr      * 0.8.3    2019-07-04 [1] CRAN (R 3.6.0)                  
+##  EBImage    * 4.23.2   2019-07-19 [1] Github (aoles/EBImage@fe4b0b7)  
+##  ggplot2    * 3.2.0    2019-06-16 [1] CRAN (R 3.6.0)                  
+##  imager     * 0.41.2   2019-01-23 [1] CRAN (R 3.6.0)                  
+##  magick     * 2.0      2018-10-05 [1] CRAN (R 3.6.0)                  
+##  opencv     * 0.1.9000 2019-07-23 [1] Github (ropensci/opencv@18c3081)
+##  purrr      * 0.3.2    2019-03-15 [1] CRAN (R 3.6.0)                  
+##  reticulate * 1.12     2019-04-12 [1] CRAN (R 3.6.0)                  
+##  tidyr      * 0.8.3    2019-03-01 [1] CRAN (R 3.6.0)                  
+##  tidyverse  * 1.2.1    2017-11-14 [1] CRAN (R 3.6.0)                  
+## 
+## [1] /Library/Frameworks/R.framework/Versions/3.6/Resources/library
+```
+
+
+```
+## -----
+## cv2       	4.1.0
+## matplotlib	3.1.1
+## numpy     	1.16.4
+## pandas    	0.25.0
+## pyper     	1.1.2
+## seaborn   	0.9.0
+## -----
+## Python 3.7.4 (v3.7.4:e09359112e, Jul  8 2019, 14:36:03) [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
+## Darwin-18.2.0-x86_64-i386-64bit
+## 12 logical CPU cores, i386
+## -----
+## Session information updated at 2019-07-24 13:09
 ```
