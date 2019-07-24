@@ -250,7 +250,7 @@ cv2$imwrite(path_out, img)
 
 ```
 ##    user  system elapsed 
-##   0.052   0.010   0.064
+##   0.054   0.011   0.066
 ```
 
 
@@ -263,7 +263,7 @@ image_write(img, path_out)
 
 ```
 ##    user  system elapsed 
-##   0.073   0.000   0.073
+##   0.072   0.001   0.074
 ```
 
 
@@ -276,7 +276,7 @@ writeImage(img, path_out)
 
 ```
 ##    user  system elapsed 
-##   0.340   0.028   0.369
+##   0.349   0.030   0.381
 ```
 
 
@@ -289,7 +289,7 @@ save.image(img, path_out)
 
 ```
 ##    user  system elapsed 
-##   0.415   0.039   0.454
+##   0.428   0.042   0.472
 ```
 
 `cv2`が一番早い。（cv2 > magick > EBImage > imager）
@@ -310,7 +310,6 @@ f_ocv <- function(path_in, path_out){
   img <- ocv_read(path_in)
   ocv_write(img, path_out)
 }
-
 
 f_magick <- function(path_in, path_out){
   img <- image_read(path_in)
@@ -339,17 +338,17 @@ mbm <- microbenchmark(
 ```
 ## Unit: milliseconds
 ##            expr       min        lq      mean    median        uq
-##           r_ocv  17.62351  18.20198  18.72359  18.69244  19.00913
-##  reticulate_cv2  37.46744  40.62251  54.02448  43.86298  49.53317
-##          magick  71.50535  72.99927  75.46141  75.02189  77.64393
-##         EBimage 132.58376 141.76463 169.20284 147.94367 165.47668
-##          imager 214.00574 317.90782 328.92654 333.54001 354.88929
+##           r_ocv  17.63388  18.15315  18.61418  18.62105  18.89827
+##  reticulate_cv2  36.95006  40.57197  52.75095  43.68728  48.54142
+##          magick  71.13356  72.20147  74.53826  74.20031  77.14927
+##         EBimage 130.98973 141.94418 173.26454 146.43775 238.93343
+##          imager 227.06561 319.17766 337.26327 338.83990 360.92046
 ##        max neval   cld
-##   21.06243   100 a    
-##  170.29455   100  b   
-##   80.46020   100   c  
-##  275.26921   100    d 
-##  493.24726   100     e
+##   20.75041   100 a    
+##  167.77000   100  b   
+##   84.34287   100   c  
+##  275.81761   100    d 
+##  464.49577   100     e
 ```
 
 ![](memo2_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
@@ -623,5 +622,5 @@ Pyperを使ってPython上でRを動かすより、reticulateを使ってR上で
 ## Darwin-18.2.0-x86_64-i386-64bit
 ## 12 logical CPU cores, i386
 ## -----
-## Session information updated at 2019-07-24 13:38
+## Session information updated at 2019-07-24 13:57
 ```

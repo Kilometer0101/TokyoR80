@@ -299,7 +299,6 @@ f_ocv <- function(path_in, path_out){
   ocv_write(img, path_out)
 }
 
-
 f_magick <- function(path_in, path_out){
   img <- image_read(path_in)
   image_write(img, path_out)
@@ -369,7 +368,7 @@ for i in range(0, 100):
 pyenv <- import_main()
 pyenv$result %>% data.frame(expr = "py_ocv", time = .) %>%
   rbind(mbm %>% data.frame %>% mutate(time = time/10^9)) %>% 
-  ggplot(aes(expr, log(time)))+
+  ggplot(aes(expr, log10(time)))+
   geom_violin()+
   theme(axis.title.y = element_blank())+
   ylab("log(time[sec])")+
