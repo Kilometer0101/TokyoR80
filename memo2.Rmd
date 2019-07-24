@@ -49,6 +49,11 @@ pipenv run pip freeze
 pipenv install numpy
 ```
 
+proxy下なら、install前にshellした状態でpathを通しておく。
+```{bash, eval = F}
+export HTTP_PROXY=http://my-proxy-server:port
+export HTTPS_PROXY=http://my-proxy-server:port
+```
 
 ## R側の準備
 
@@ -395,7 +400,7 @@ use_python(python = python_env, required = TRUE)
 `r ''````
 
 `r ''````{python}
-df=pd.read_csv("data/sample1.csv")
+df = pd.read_csv("data/sample1.csv")
 
 df
 `r ''````
@@ -414,7 +419,7 @@ df.head(3)
 
 ````
 `r ''````{python}
-df.sort_values(by ='z')
+df.sort_values(by = "z")
 `r ''````
 ````
 
@@ -426,8 +431,8 @@ df.sort_values(by ='z')
 
 ````
 `r ''````{python}
-py_iris=r.iris
-py_iris=pd.DataFrame(py_iris)
+py_iris = r.iris
+py_iris = pd.DataFrame(py_iris)
 
 py_iris.head(3)
 `r ''````

@@ -48,6 +48,12 @@ pipenv run pip freeze
 pipenv install numpy
 ```
 
+proxy下なら、install前にshellした状態でpathを通しておく。
+
+```bash
+export HTTP_PROXY=http://my-proxy-server:port
+export HTTPS_PROXY=http://my-proxy-server:port
+```
 
 ## R側の準備
 
@@ -257,7 +263,7 @@ image_write(img, path_out)
 
 ```
 ##    user  system elapsed 
-##   0.072   0.001   0.073
+##   0.073   0.000   0.073
 ```
 
 
@@ -270,7 +276,7 @@ writeImage(img, path_out)
 
 ```
 ##    user  system elapsed 
-##   0.367   0.031   0.399
+##   0.340   0.028   0.369
 ```
 
 
@@ -333,20 +339,20 @@ mbm <- microbenchmark(
 ```
 ## Unit: milliseconds
 ##            expr       min        lq      mean    median        uq
-##           r_ocv  17.56127  18.11191  18.73587  18.71679  19.15926
-##  reticulate_cv2  37.06164  41.03496  50.36806  45.38421  48.25362
-##          magick  71.47012  72.94706  75.17603  74.51553  77.33658
-##         EBimage 130.86483 138.94968 169.60885 147.69904 174.29747
-##          imager 227.67503 263.68903 321.41727 326.41989 353.26836
+##           r_ocv  17.62351  18.20198  18.72359  18.69244  19.00913
+##  reticulate_cv2  37.46744  40.62251  54.02448  43.86298  49.53317
+##          magick  71.50535  72.99927  75.46141  75.02189  77.64393
+##         EBimage 132.58376 141.76463 169.20284 147.94367 165.47668
+##          imager 214.00574 317.90782 328.92654 333.54001 354.88929
 ##        max neval   cld
-##   20.59911   100 a    
-##  171.87491   100  b   
-##   80.64072   100   c  
-##  275.23091   100    d 
-##  472.26070   100     e
+##   21.06243   100 a    
+##  170.29455   100  b   
+##   80.46020   100   c  
+##  275.26921   100    d 
+##  493.24726   100     e
 ```
 
-![](memo2_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
+![](memo2_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
 
 結果：opencvパッケージのほうが早かったですね...。
 
@@ -371,7 +377,7 @@ for i in range(0, 100):
 
 これを含めて比べてみると、こうなる。
 
-![](memo2_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
+![](memo2_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
 
 pythonからopencv打った方がRのopencv pkgよりちょっとだけ早いけどほぼ同等。
 
@@ -397,7 +403,7 @@ use_python(python = python_env, required = TRUE)
 ```
 
 ```{python}
-df=pd.read_csv("data/sample1.csv")
+df = pd.read_csv("data/sample1.csv")
 
 df
 ```
@@ -419,7 +425,7 @@ df
 
 ````
 ```{python}
-df.sort_values(by ='z')
+df.sort_values(by = "z")
 ```
 ````
 
@@ -447,8 +453,8 @@ df.sort_values(by ='z')
 
 ````
 ```{python}
-py_iris=r.iris
-py_iris=pd.DataFrame(py_iris)
+py_iris = r.iris
+py_iris = pd.DataFrame(py_iris)
 
 py_iris.head(3)
 ```
@@ -617,5 +623,5 @@ Pyperを使ってPython上でRを動かすより、reticulateを使ってR上で
 ## Darwin-18.2.0-x86_64-i386-64bit
 ## 12 logical CPU cores, i386
 ## -----
-## Session information updated at 2019-07-24 13:32
+## Session information updated at 2019-07-24 13:38
 ```
