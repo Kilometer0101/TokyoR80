@@ -1,15 +1,13 @@
 ---
 title: "Rユーザーのため!?のPython環境構築"
 author: "km"
-date: "`r Sys.Date()`"
+date: "2019-07-25"
 output: 
   html_document: 
     keep_md: TRUE
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 ##### Python環境構築(ｲﾏｺｺ)→[初めてのreticulate](memo2.html)
 
@@ -17,8 +15,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ##### 実行環境
 
-```{r, echo =F}
-sessioninfo::os_name()
+
+```
+## [1] "macOS Mojave 10.14.3"
 ```
 
 ### 要件
@@ -72,14 +71,16 @@ RからPythonを呼び出す場合、`reticulate::use_virtualenv()`や`reticulat
 
 1. 仮想環境を消す
 
-```{bash, eval =F}
+
+```bash
 conda info -e
 conda remove -n <envname> --all
 ```
 
 2. 削除ツールの実行
 
-```{bash, eval =F}
+
+```bash
 conda install anaconda-clean
 anaconda-clean
 ```
@@ -88,7 +89,8 @@ anaconda-clean
 
 #### Homebrewのメンテナンス
 
-```{bash, eval = F}
+
+```bash
 brew doctor
 brew update
 brew upgrade
@@ -106,14 +108,16 @@ brew cleanup
 
 pip3で入れてpathを通します。
 
-```{bash, eval = F}
+
+```bash
 pip3 install pipenv
 echo 'export PIPENV_VENV_IN_PROJECT=true' >> ~/.bash_profile
 ```
 
 #### 仮想環境を作る
 
-```{bash, eval = F}
+
+```bash
 cd <project root>
 
 pipenv install        # 指定しないと↑の公式から入れたものが優先される
@@ -129,7 +133,8 @@ installすると、rootに`.venv`フォルダと、`Pipfile`, `Pipfile.lock`が�
 
 `Pipfile`はテキストで編集可。下記のような内容になっている。
 
-```{eval =F}
+
+```eval
 [[source]]
 name = "pypi"
 url = "https://pypi.org/simple"
@@ -150,7 +155,8 @@ python_version = "3.7"
 
 reticulate側から正常に認識させるためには**numpyは必須**。
 
-```{bash, eval = F}
+
+```bash
 pipenv install numpy
 pipenv install pandas
 ...
@@ -166,20 +172,23 @@ pipenv install pandas
 
 現在の仮想環境にインストールされているパッケージを確認。
 
-```{bash, eval =F}
+
+```bash
 pipenv run pip freeze
 ```
 
 パッケージの依存関係を表示
 
-```{bash, eval=F}
+
+```bash
 pipenv graph 
 ```
 
 
 ##### Pythonインタープリタのアドレスを確認。
 
-```{bash, eval =F}
+
+```bash
 pipenv --venv
 ```
 

@@ -250,7 +250,7 @@ cv2$imwrite(path_out, img)
 
 ```
 ##    user  system elapsed 
-##   0.054   0.011   0.066
+##   0.055   0.012   0.067
 ```
 
 
@@ -263,7 +263,7 @@ image_write(img, path_out)
 
 ```
 ##    user  system elapsed 
-##   0.072   0.001   0.074
+##   0.076   0.001   0.077
 ```
 
 
@@ -276,7 +276,7 @@ writeImage(img, path_out)
 
 ```
 ##    user  system elapsed 
-##   0.349   0.030   0.381
+##   0.349   0.029   0.379
 ```
 
 
@@ -289,7 +289,7 @@ save.image(img, path_out)
 
 ```
 ##    user  system elapsed 
-##   0.428   0.042   0.472
+##   0.422   0.041   0.464
 ```
 
 `cv2`が一番早い。（cv2 > magick > EBImage > imager）
@@ -338,17 +338,17 @@ mbm <- microbenchmark(
 ```
 ## Unit: milliseconds
 ##            expr       min        lq      mean    median        uq
-##           r_ocv  17.63388  18.15315  18.61418  18.62105  18.89827
-##  reticulate_cv2  36.95006  40.57197  52.75095  43.68728  48.54142
-##          magick  71.13356  72.20147  74.53826  74.20031  77.14927
-##         EBimage 130.98973 141.94418 173.26454 146.43775 238.93343
-##          imager 227.06561 319.17766 337.26327 338.83990 360.92046
+##           r_ocv  17.58353  18.13992  18.68252  18.72910  18.97823
+##  reticulate_cv2  38.01378  40.80183  51.88013  45.59642  49.12486
+##          magick  71.41462  72.46573  75.16637  74.86358  77.55575
+##         EBimage 132.16916 135.87022 171.34037 145.19906 232.26859
+##          imager 221.99538 293.79279 333.01412 336.82500 361.53155
 ##        max neval   cld
-##   20.75041   100 a    
-##  167.77000   100  b   
-##   84.34287   100   c  
-##  275.81761   100    d 
-##  464.49577   100     e
+##   20.52382   100 a    
+##  182.07850   100  b   
+##   85.05011   100   c  
+##  296.22705   100    d 
+##  466.01142   100     e
 ```
 
 ![](memo2_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
@@ -622,5 +622,5 @@ Pyperを使ってPython上でRを動かすより、reticulateを使ってR上で
 ## Darwin-18.2.0-x86_64-i386-64bit
 ## 12 logical CPU cores, i386
 ## -----
-## Session information updated at 2019-07-24 13:57
+## Session information updated at 2019-07-24 15:30
 ```

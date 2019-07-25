@@ -371,7 +371,7 @@ pyenv$result %>% data.frame(expr = "py_ocv", time = .) %>%
   ggplot(aes(expr, log10(time)))+
   geom_violin()+
   theme(axis.title.y = element_blank())+
-  ylab("log(time[sec])")+
+  ylab("log10(time[sec])")+
   coord_flip()
 ```
 
